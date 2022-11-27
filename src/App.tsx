@@ -103,7 +103,7 @@ function App() {
 
   return (
     <div
-      style={{ display: "flex", justifyContent: "center", paddingTop: "20px" }}
+      style={{ display: "flex", justifyContent: "center", paddingTop: "50px" }}
     >
       <div className="App" style={{ width: `${inputWindowWidth}px`, height: `${inputWindowHeight}px` }}>
         <div
