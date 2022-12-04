@@ -20,7 +20,6 @@ const useScrollItem = ({
   data,
 }: ScrollItemType) =>
   useMemo(() => {
-    console.log(horizontalStartIdx, verticalStartIdx);
     return data.slice(verticalStartIdx, verticalEndIdx).map((row, i) => {
       const rowChildren = row
         .slice(horizontalStartIdx, horizontalEndIdx)
@@ -30,14 +29,13 @@ const useScrollItem = ({
           let background = (vIdx + hIdx) % 2 === 1 ? "#f8f8f0" : "white";
           return (
             <div
-              key={"row-" + i + "-column-" + j}
+              key={"row-" + vIdx + "-column-" + hIdx}
               style={{
                 background,
                 color: "black",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                flex: "0 0 " + cellWidth + "px",
                 width: cellWidth + "px",
                 height: cellHeight + "px",
               }}
@@ -54,7 +52,7 @@ const useScrollItem = ({
             display: "flex",
           }}
         >
-          <div style={{ width: `${cellWidth * horizontalStartIdx}px` }}></div>
+          {/* <div style={{ width: `${cellWidth * horizontalStartIdx}px` }}></div> */}
           {rowChildren}
         </div>
       );

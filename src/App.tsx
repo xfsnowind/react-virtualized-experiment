@@ -1,8 +1,7 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback } from "react";
 import type { UIEvent } from "react";
 import debounce from "lodash.debounce";
-import { getScrollbarWidth } from "./util";
-import useWindowDimensions from "./Hooks/useWindowDimensions";
+// import { getScrollbarWidth } from "./util";
 import useScrollItem from "./Hooks/useScrollItem";
 import "./App.css";
 
@@ -40,19 +39,11 @@ function App() {
   const [verticalScroll, setVerticalScroll] = React.useState(0);
   const [horizontalScroll, setHorizontalScroll] = React.useState(0);
 
-  const vOffset = useRef(0);
-  const hOffset = useRef(0);
-
-  const scrollbarWidth = getScrollbarWidth();
-
   // set up scroll event to update the offset of top and left
   const onScroll = useCallback((event: UIEvent<HTMLDivElement>) => {
     const target = event.target as HTMLDivElement;
     const leftOffset = Math.max(0, target.scrollLeft);
     const topOffset = Math.max(0, target.scrollTop);
-
-    vOffset.current = topOffset;
-    hOffset.current = leftOffset;
 
     setVerticalScroll(topOffset);
     setHorizontalScroll(leftOffset);
@@ -60,22 +51,17 @@ function App() {
     debounce(forceUpdate, 160);
   }, []);
 
-  // resizeobserver to update the size of the window
-  const [windowWidth, windowHeight] = useWindowDimensions(windowRef);
-
-  // calculate the width of scrollbar
-
   // calculate the start and end row and column based on the offset
   const [verticalStartIdx, verticalEndIdx] = useIndexForDimensions({
     offset: verticalScroll,
     cellDimension: cellHeight,
-    windowDimension: windowHeight,
+    windowDimension: inputWindowHeight,
   });
 
   const [horizontalStartIdx, horizontalEndIdx] = useIndexForDimensions({
     offset: horizontalScroll,
     cellDimension: cellWidth,
-    windowDimension: windowWidth,
+    windowDimension: inputWindowWidth,
   });
 
   // console.log(
@@ -105,14 +91,22 @@ function App() {
     <div
       style={{ display: "flex", justifyContent: "center", paddingTop: "50px" }}
     >
-      <div className="App" style={{ width: `${inputWindowWidth}px`, height: `${inputWindowHeight}px` }}>
+      {/* <div
+        className="App"
+        style={{
+          width: `${inputWindowWidth}px`,
+          height: `${inputWindowHeight}px`,
+        }}
+      > */}
         <div
           ref={windowRef}
           onScroll={onScroll}
           style={{
             contain: "strict",
-            width: "100%",
-            height: "100%",
+            // width: "100%",
+            // height: "100%",
+            width: `${inputWindowWidth}px`,
+            height: `${inputWindowHeight}px`,
             overflow: "auto",
             position: "relative",
           }}
@@ -121,34 +115,36 @@ function App() {
             style={{
               width: `${cellWidth * data[0].length}px`,
               height: `${cellHeight * data.length}px`,
+              // minHeight: 'auto'
             }}
           >
-            <div
+            {/* <div
               style={{
                 position: "sticky",
                 top: 0,
                 left: 0,
-                width: `${windowWidth - scrollbarWidth}px`,
-                height: `${windowHeight - scrollbarWidth}px`,
+                width: `${inputWindowWidth}px`,
+                height: `${inputWindowHeight}px`,
+                // width: `${windowWidth - scrollbarWidth}px`,
+                // height: `${windowHeight - scrollbarWidth}px`,
               }}
-            >
+            > */}
               <div
                 style={{
                   position: "absolute",
-                  transform: `translate(${-hOffset.current}px, ${-vOffset.current}px)`,
-                  willChange: "transform",
-                  top: 0,
-                  left: 0,
+                  transform: `translate(${horizontalScroll}px, ${verticalScroll}px)`,
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
-                <div style={{ height: `${cellHeight * verticalStartIdx}px` }} />
+                {/* <div style={{ height: `${cellHeight * verticalStartIdx}px` }} /> */}
                 {scrollItems}
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+    //   </div>
+    // </div>
   );
 }
 

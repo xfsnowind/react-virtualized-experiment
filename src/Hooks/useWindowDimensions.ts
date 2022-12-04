@@ -1,9 +1,12 @@
 import * as React from "react"
 
 const useWindowDimensions = (windowRef: React.RefObject<HTMLDivElement>) => {
-  const windowHeightRef = React.useRef(0)
-  const windowWidthRef = React.useRef(0)
+  // const windowHeightRef = React.useRef(0)
+  // const windowWidthRef = React.useRef(0)
   const browserWidth = React.useRef(0)
+
+  const [windowWidth, setWindonwWidth] = React.useState(0)
+  const [windowHeight, setWindonwHeight] = React.useState(0)
 
   const [, forceUpdate] = React.useReducer((x) => (x + 1) % 10, 0)
 
@@ -24,8 +27,11 @@ const useWindowDimensions = (windowRef: React.RefObject<HTMLDivElement>) => {
       // as expected - resizing up works, but resizing down will not be calculated
       // correctly (it doesn't resize at all). Subtracting 1 from the width and height
       // seems to fix this behavior.
-      windowWidthRef.current = parentElement.clientWidth - 1
-      windowHeightRef.current = parentElement.clientHeight - 1
+      // windowWidthRef.current = parentElement.clientWidth - 1
+      // windowHeightRef.current = parentElement.clientHeight - 1
+
+      setWindonwWidth(parentElement.clientWidth - 1)
+      setWindonwHeight(parentElement.clientHeight - 1)
 
       let root = parentElement
       while (root.parentElement) root = root.parentElement
@@ -44,7 +50,8 @@ const useWindowDimensions = (windowRef: React.RefObject<HTMLDivElement>) => {
     return () => resizeObserver.disconnect()
   }, [windowRef])
 
-  return [windowWidthRef.current, windowHeightRef.current, browserWidth.current] as const
+  return [windowWidth, windowHeight, browserWidth.current] as const
+  // return [windowWidthRef.current, windowHeightRef.current, browserWidth.current] as const
 }
 
 export default useWindowDimensions
