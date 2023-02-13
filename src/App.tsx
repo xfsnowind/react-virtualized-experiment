@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import type { UIEvent } from "react";
 import debounce from "lodash.debounce";
-// import { getScrollbarWidth } from "./util";
 import useScrollItem from "./Hooks/useScrollItem";
 import "./App.css";
 
